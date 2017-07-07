@@ -7,6 +7,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   // Connect to the database
   $con = mysqli_connect($sql_server, $sql_user, $sql_pass, $sql_database);
+  if (mysqli_connect_errno()) {
+    printf("Connect failed: %s\n", mysqli_connect_error());
+    exit();
+}
   $name = $_POST["username"];
   $email = $_POST["email"];
   $clear_pass = $_POST["password"];
@@ -20,8 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $salt .= chr(mt_rand(32, 126));
   }
   $password = sha1($clear_pass . $salt);
-
-  $sth = mysqli_prepare($con, "INSERT INTO user " . "(name, email, password, salt, created_on, verify_string, verified) " . "VALUES (?, ?, ?, ?, NOW(), ?, 0)");
+  $sth = mysqli_prepare($con, "INSERT INTO user VALUES (?, ?, ?, ?, 'NOW()', ?, '0')");
   mysqli_stmt_bind_param($sth, "sssss", $name, $email, $password, $salt, $verify_string);
   mysqli_stmt_execute($sth);
   if (mysqli_stmt_errno($sth)) {

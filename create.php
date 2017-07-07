@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 
   if ($name_valid && $version_valid && $description_valid && $file_valid) {
-    $stmt = mysqli_prepare($con, "SELECT count(*) FROM packages WHERE name = ?");
+    $stmt = mysqli_prepare($con, "SELECT COUNT(*) FROM packages WHERE name=?");
     mysqli_stmt_bind_param($stmt, "s", $_POST["name"]);
     mysqli_execute($stmt);
     mysqli_stmt_bind_result($stmt, $count);
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $name_valid = false;
     } else {
       $stmt_string = $_POST["mode"] == "modify" ? "UPDATE packages SET version = ?, description = ?, author = ?, extension = ? WHERE name = ?" : "INSERT INTO packages (version, description, author, extension, name) VALUES (?, ?, ?, ?, ?)";
-      $stmt = mysqli_prepare($con, $stmt_string);
+	  $stmt = mysqli_prepare($con, $stmt_string);
       if (!$stmt) {
         echo mysqli_stmt_errno($stmt);
         exit ;
@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && $_GET["mode"] == "modify") {
   mysqli_stmt_bind_param($stmt, "ss", $name_value, $_SESSION["username"]);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_store_result($stmt);
-  mysqli_bind_result($stmt, $version_value, $description_value);
+  //mysqli_bind_result($stmt, $version_value, $description_value);
   if (mysqli_stmt_num_rows($stmt) == 1) {
     mysqli_stmt_fetch($stmt);
     mysqli_stmt_free_result($stmt);

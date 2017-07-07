@@ -8,8 +8,9 @@ if (mysqli_connect_errno())
   {
     echo "Failed to connect to MySQL: " . mysqli_connect_error();
   }
-$stmt = mysqli_prepare($con,"SELECT name, version, description FROM packages WHERE author = ?");
-mysqli_stmt_bind_param($stmt,"s", $_SESSION["username"]);
+$stmt = mysqli_prepare($con,"SELECT `name`, `version`, `description` FROM `packages` WHERE 1");
+  
+//mysqli_stmt_bind_param($stmt,"s", $_SESSION["username"]);
 mysqli_execute($stmt);
 mysqli_stmt_bind_result($stmt, $name, $version, $description);
 ?>
